@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.adwait.tech</groupId>
+  <artifactId>First_try</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Demo</name>
+
+  <dependencies>
+    <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-core_2.12</artifactId>
+       <version>3.0.3</version>
+    </dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
+    <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-mllib_2.12</artifactId>
+       <version>3.0.3</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
+    <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-sql_2.12</artifactId>
+       <version>3.0.3</version>
+    </dependency>
+
+<!-- https://mvnrepository.com/artifact/com.johnsnowlabs.nlp/spark-nlp -->
+    <dependency>
+       <groupId>com.johnsnowlabs.nlp</groupId>
+       <artifactId>spark-nlp_2.12</artifactId>
+       <version>3.0.3</version>
+       <scope>test</scope>
+    </dependency>
+
+
+
+
+  </dependencies>
+
+
+<properties>
+<maven.compiler.source>1.8</maven.compiler.source>
+<maven.compiler.target></maven.compiler.target>
+</properties>
+</project>
