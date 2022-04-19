@@ -1,16 +1,15 @@
-import org.apache.spark.ml.classification.LogisticRegression;
-import org.apache.spark.ml.classification.LogisticRegressionModel;
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
-import org.apache.spark.ml.feature.CountVectorizer;
-import org.apache.spark.ml.feature.CountVectorizerModel;
-import org.apache.spark.ml.feature.Tokenizer;
-import org.apache.spark.ml.feature.VectorAssembler;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.ml.classification.NaiveBayes;
+import org.apache.spark.ml.classification.NaiveBayesModel;
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
+import org.apache.spark.ml.feature.HashingTF;
+import org.apache.spark.ml.feature.IDF;
+import org.apache.spark.ml.feature.IDFModel;
+import org.apache.spark.ml.feature.Tokenizer;
+import org.apache.spark.sql.*;
+import org.apache.spark.ml.feature.VectorAssembler;
 
-public class Logistic_Regression {
+public class Naive_Bayes_TFIDF {
 	public static void main(String[] args) {
 		SparkSession spark = SparkSession
 			      .builder()
@@ -38,17 +37,26 @@ public class Logistic_Regression {
 	    Dataset<Row>[] BothTrainTest = df.randomSplit(new double[] {0.8d,0.2d});
 		Dataset<Row> TrainDf = BothTrainTest[0];
 		Dataset<Row> TestDf = BothTrainTest[1];
-    
-		CountVectorizerModel cvModel = new CountVectorizer()
-	    		  .setInputCol("words")
-	    	      .setOutputCol("feature")
-	    	      .setVocabSize(20000)
-	    	      .setMinDF(2)
-	    	      .fit(TrainDf);
+		
+		
+		
+	    HashingTF hashingTF = new HashingTF()
+	      .setInputCol("words")
+	      .setOutputCol("rawFeatures")
+	      .setNumFeatures(20000);
+		
+	    TrainDf = hashingTF.transform(TrainDf);	  
+	    TestDf = hashingTF.transform(TestDf);	
 	    
-	    TrainDf = cvModel.transform(TrainDf);	  
-	    TestDf = cvModel.transform(TestDf);	
+	    IDF idf = new IDF().setInputCol("rawFeatures").setOutputCol("feature");
+	    IDFModel idfModel = idf.fit(TrainDf);
 	    
+	    TrainDf = idfModel.transform(TrainDf);	  
+	    TestDf = idfModel.transform(TestDf);
+	    TrainDf.show();
+	    
+	    
+
 	    
 	    VectorAssembler assembler = new VectorAssembler()
 	    	      .setInputCols(new String[]{"feature"})
@@ -58,15 +66,10 @@ public class Logistic_Regression {
 	    
        
 	  //---------------------------Model Training---------------------//
-
-	    LogisticRegression lr = new LogisticRegression()
-	    		  .setMaxIter(10)
-	    		  .setRegParam(0.3)
-	    		  .setElasticNetParam(0.8)
-	    		  .setLabelCol("tagging");
-	    LogisticRegressionModel model = lr.fit(TrainDf);
+	    NaiveBayes nb = new NaiveBayes().setLabelCol("tagging");
+	    NaiveBayesModel model = nb.fit(TrainDf);
 	    Dataset<Row> predictions = model.transform(TestDf);
-	   
+	    
 	    
 	  //---------------------------Printing Accuracy---------------------//
 	    MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()

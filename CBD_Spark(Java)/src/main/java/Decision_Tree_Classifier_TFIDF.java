@@ -1,8 +1,10 @@
-import org.apache.spark.ml.classification.LogisticRegression;
-import org.apache.spark.ml.classification.LogisticRegressionModel;
+import org.apache.spark.ml.classification.DecisionTreeClassifier;
+import org.apache.spark.ml.classification.DecisionTreeClassificationModel;
+
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
-import org.apache.spark.ml.feature.CountVectorizer;
-import org.apache.spark.ml.feature.CountVectorizerModel;
+import org.apache.spark.ml.feature.HashingTF;
+import org.apache.spark.ml.feature.IDF;
+import org.apache.spark.ml.feature.IDFModel;
 import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
@@ -10,7 +12,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 
-public class Logistic_Regression {
+public class Decision_Tree_Classifier_TFIDF {
 	public static void main(String[] args) {
 		SparkSession spark = SparkSession
 			      .builder()
@@ -39,15 +41,20 @@ public class Logistic_Regression {
 		Dataset<Row> TrainDf = BothTrainTest[0];
 		Dataset<Row> TestDf = BothTrainTest[1];
     
-		CountVectorizerModel cvModel = new CountVectorizer()
-	    		  .setInputCol("words")
-	    	      .setOutputCol("feature")
-	    	      .setVocabSize(20000)
-	    	      .setMinDF(2)
-	    	      .fit(TrainDf);
-	    
-	    TrainDf = cvModel.transform(TrainDf);	  
-	    TestDf = cvModel.transform(TestDf);	
+		HashingTF hashingTF = new HashingTF()
+			      .setInputCol("words")
+			      .setOutputCol("rawFeatures")
+			      .setNumFeatures(20000);
+				
+			    TrainDf = hashingTF.transform(TrainDf);	  
+			    TestDf = hashingTF.transform(TestDf);	
+			    
+			    IDF idf = new IDF().setInputCol("rawFeatures").setOutputCol("feature");
+			    IDFModel idfModel = idf.fit(TrainDf);
+			    
+			    TrainDf = idfModel.transform(TrainDf);	  
+			    TestDf = idfModel.transform(TestDf);
+			    TrainDf.show();        
 	    
 	    
 	    VectorAssembler assembler = new VectorAssembler()
@@ -58,17 +65,16 @@ public class Logistic_Regression {
 	    
        
 	  //---------------------------Model Training---------------------//
-
-	    LogisticRegression lr = new LogisticRegression()
-	    		  .setMaxIter(10)
-	    		  .setRegParam(0.3)
-	    		  .setElasticNetParam(0.8)
-	    		  .setLabelCol("tagging");
-	    LogisticRegressionModel model = lr.fit(TrainDf);
-	    Dataset<Row> predictions = model.transform(TestDf);
-	   
 	    
+	    
+		DecisionTreeClassifier dt = new DecisionTreeClassifier().setLabelCol("tagging");
+        DecisionTreeClassificationModel model = dt.fit(TrainDf);
+	    Dataset<Row> predictions = model.transform(TestDf);
+
+	    
+	   
 	  //---------------------------Printing Accuracy---------------------//
+	    
 	    MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
 	    	      .setLabelCol("tagging")
 	    	      .setPredictionCol("prediction")
