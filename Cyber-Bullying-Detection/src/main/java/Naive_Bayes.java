@@ -54,22 +54,22 @@ public class Naive_Bayes {
 		VectorAssembler assembler = new VectorAssembler()
 	    	      .setInputCols(new String[]{"Count Vectorizer"})
 	    	      .setOutputCol("features");
-	    TrainDf = assembler.transform(TrainDf);
-	    TestDf = assembler.transform(TestDf);	
+	    	TrainDf = assembler.transform(TrainDf);
+	    	TestDf = assembler.transform(TestDf);	
 
-	  //---------------------------Model Training---------------------//
-	    NaiveBayes nb = new NaiveBayes().setLabelCol("tagging");
-	    NaiveBayesModel model = nb.fit(TrainDf);
-	    Dataset<Row> predictions = model.transform(TestDf);
+	  	//---------------------------Model Training---------------------//
+	    	NaiveBayes nb = new NaiveBayes().setLabelCol("tagging");
+	    	NaiveBayesModel model = nb.fit(TrainDf);
+	    	Dataset<Row> predictions = model.transform(TestDf);
 	    
 	    
-	  //---------------------------Printing Accuracy---------------------//
-	    MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
+	  	//---------------------------Printing Accuracy---------------------//
+	    	MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
 	    	      .setLabelCol("tagging")
 	    	      .setPredictionCol("prediction")
 	    	      .setMetricName("accuracy");
-	    	    double accuracy = evaluator.evaluate(predictions);
-	    	    System.out.println("Test set accuracy = " + accuracy);
+	    	double accuracy = evaluator.evaluate(predictions);
+	    	System.out.println("Test set accuracy = " + accuracy);
 	    
 	    
 		spark.stop();
