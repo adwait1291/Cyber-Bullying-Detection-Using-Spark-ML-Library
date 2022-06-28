@@ -60,13 +60,13 @@ public class Logistic_Regression {
 
 
 		//---------------------------Model Training---------------------//
-	    LogisticRegression lr = new LogisticRegression()
+	    	LogisticRegression lr = new LogisticRegression()
 	    		  .setMaxIter(10)
 	    		  .setRegParam(0.3)
 	    		  .setElasticNetParam(0.8)
 	    		  .setLabelCol("tagging");
-	    LogisticRegressionModel model = lr.fit(TrainDf);
-	    Dataset<Row> predictions = model.transform(TestDf);
+	    	LogisticRegressionModel model = lr.fit(TrainDf);
+	    	Dataset<Row> predictions = model.transform(TestDf);
 	   
 	    
 	  	//---------------------------Printing Accuracy---------------------//
