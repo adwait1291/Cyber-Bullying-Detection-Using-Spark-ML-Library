@@ -1,6 +1,5 @@
 import org.apache.spark.ml.classification.DecisionTreeClassifier;
 import org.apache.spark.ml.classification.DecisionTreeClassificationModel;
-
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.feature.CountVectorizer;
 import org.apache.spark.ml.feature.CountVectorizerModel;
@@ -14,10 +13,12 @@ import org.apache.spark.sql.types.DataTypes;
 public class Decision_Tree_Classifier {
 	public static void main(String[] args) {
 		SparkSession spark = SparkSession
-			      .builder()
-			      .appName("Naive_Bayes")
-			      .master("local[*]")
-			      .getOrCreate();
+			    .builder()
+			    .appName("Naive_Bayes")
+			    .master("local[*]")
+				.getOrCreate();
+			
+				
 		//---------------------------Loading Dataset---------------------//
 		String path = "data/data.csv";
 		Dataset<Row> df = spark.read().option("header", "true").csv(path);
@@ -33,13 +34,14 @@ public class Decision_Tree_Classifier {
 	    
 	    Tokenizer tokenizer = new Tokenizer().setInputCol("comments").setOutputCol("words");
 	    df = tokenizer.transform(df);
+		df.show();
 	    
-	    
-	  //---------------------------Splitting into train and test set---------------------//
+	    //---------------------------Splitting into train and test set---------------------//
 	    Dataset<Row>[] BothTrainTest = df.randomSplit(new double[] {0.8d,0.2d});
 		Dataset<Row> TrainDf = BothTrainTest[0];
 		Dataset<Row> TestDf = BothTrainTest[1];
     
+
 	    CountVectorizerModel cvModel = new CountVectorizer()
 	    		  .setInputCol("words")
 	    	      .setOutputCol("feature")
@@ -50,7 +52,7 @@ public class Decision_Tree_Classifier {
 	    TrainDf = cvModel.transform(TrainDf);	  
 	    TestDf = cvModel.transform(TestDf);	    
 	    
-	    
+
 	    VectorAssembler assembler = new VectorAssembler()
 	    	      .setInputCols(new String[]{"feature"})
 	    	      .setOutputCol("features");
@@ -58,24 +60,19 @@ public class Decision_Tree_Classifier {
 	    TestDf = assembler.transform(TestDf);	
 	    
        
-	  //---------------------------Model Training---------------------//
-	    
-	    
+		//---------------------------Model Training---------------------//
 		DecisionTreeClassifier dt = new DecisionTreeClassifier().setLabelCol("tagging");
         DecisionTreeClassificationModel model = dt.fit(TrainDf);
 	    Dataset<Row> predictions = model.transform(TestDf);
 
-	    
 	   
-	  //---------------------------Printing Accuracy---------------------//
-	    
+	    //---------------------------Printing Accuracy---------------------// 
 	    MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
-	    	      .setLabelCol("tagging")
-	    	      .setPredictionCol("prediction")
-	    	      .setMetricName("accuracy");
+	    	    .setLabelCol("tagging")
+	    	    .setPredictionCol("prediction")
+	    	    .setMetricName("accuracy");
 	    	    double accuracy = evaluator.evaluate(predictions);
 	    	    System.out.println("Test set accuracy = " + accuracy);
-	    
 	    
 		spark.stop();
 	}
