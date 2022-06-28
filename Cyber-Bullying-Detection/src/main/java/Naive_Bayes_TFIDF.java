@@ -46,7 +46,9 @@ public class Naive_Bayes_TFIDF {
 		
 	    	TrainDf = cvModel.transform(TrainDf);
 	    	TestDf = cvModel.transform(TestDf);
-	    
+		
+		
+	    	//---------------------------TF-IDF Vectorizer---------------------//
 	    	IDF idf = new IDF().setInputCol("Count Vectorizer").setOutputCol("TF-IDF Vectorizer");
 	    	IDFModel idfModel = idf.fit(TrainDf);
 	    
