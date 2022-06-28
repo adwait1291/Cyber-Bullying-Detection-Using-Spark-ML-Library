@@ -18,20 +18,20 @@ public class Naive_Bayes_TFIDF {
 		Dataset<Row> df = spark.read().option("header", "true").csv(path);
 		df.show(false);
 
-        df = df.select(
+        	df = df.select(
         		df.col("comments"),
         		df.col("tagging").cast(DataTypes.IntegerType)
-        );		
+        	);		
 	    
-	    Dataset<Row>describe = df.describe();
-	    describe.show();
+	    	Dataset<Row>describe = df.describe();
+	    	describe.show();
 
-	    Tokenizer tokenizer = new Tokenizer().setInputCol("comments").setOutputCol("words");
-	    df = tokenizer.transform(df);
+	    	Tokenizer tokenizer = new Tokenizer().setInputCol("comments").setOutputCol("words");
+	    	df = tokenizer.transform(df);
 	    
 	    
 	  	//---------------------------Splitting into train and test set---------------------//
-	    Dataset<Row>[] BothTrainTest = df.randomSplit(new double[] {0.8d,0.2d},42);
+	    	Dataset<Row>[] BothTrainTest = df.randomSplit(new double[] {0.8d,0.2d},42);
 		Dataset<Row> TrainDf = BothTrainTest[0];
 		Dataset<Row> TestDf = BothTrainTest[1];
 
@@ -44,32 +44,32 @@ public class Naive_Bayes_TFIDF {
 				.setMinDF(2)
 				.fit(TrainDf);
 		
-	    TrainDf = cvModel.transform(TrainDf);
-	    TestDf = cvModel.transform(TestDf);
+	    	TrainDf = cvModel.transform(TrainDf);
+	    	TestDf = cvModel.transform(TestDf);
 	    
-	    IDF idf = new IDF().setInputCol("Count Vectorizer").setOutputCol("TF-IDF Vectorizer");
-	    IDFModel idfModel = idf.fit(TrainDf);
+	    	IDF idf = new IDF().setInputCol("Count Vectorizer").setOutputCol("TF-IDF Vectorizer");
+	    	IDFModel idfModel = idf.fit(TrainDf);
 	    
-	    TrainDf = idfModel.transform(TrainDf);	  
-	    TestDf = idfModel.transform(TestDf);
+	    	TrainDf = idfModel.transform(TrainDf);	  
+	    	TestDf = idfModel.transform(TestDf);
 		TrainDf.show(false);
 	    
 
-	    VectorAssembler assembler = new VectorAssembler()
+	    	VectorAssembler assembler = new VectorAssembler()
 				.setInputCols(new String[]{"TF-IDF Vectorizer"})
 				.setOutputCol("features");
-	    TrainDf = assembler.transform(TrainDf);
-	    TestDf = assembler.transform(TestDf);	
+	    	TrainDf = assembler.transform(TrainDf);
+	    	TestDf = assembler.transform(TestDf);	
 	    
        
 	  	//---------------------------Model Training---------------------//
-	    NaiveBayes nb = new NaiveBayes().setLabelCol("tagging");
-	    NaiveBayesModel model = nb.fit(TrainDf);
-	    Dataset<Row> predictions = model.transform(TestDf);
+	    	NaiveBayes nb = new NaiveBayes().setLabelCol("tagging");
+	    	NaiveBayesModel model = nb.fit(TrainDf);
+	    	Dataset<Row> predictions = model.transform(TestDf);
 	    
 	    
 	  	//---------------------------Printing Accuracy---------------------//
-	    MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
+	    	MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
 				.setLabelCol("tagging")
 				.setPredictionCol("prediction")
 				.setMetricName("accuracy");
