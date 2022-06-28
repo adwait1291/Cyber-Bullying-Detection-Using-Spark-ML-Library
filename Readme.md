@@ -1,7 +1,24 @@
 ## Project Description
-#### ***The Spark ML library in JAVA is used in this project to classify comments as bullying or non-bullying. A dataset from the Kaggle website is used to train five machine learning models, and the outcomes are compared. The tokenized comments are transformed into feature vectors using the count and TF-IDF vectorizers. Models' performance in the test dataset is evaluated using the accuracy metric.***
+This project uses the Spark ML library in JAVA to classify comments as bullying and non-bullying. A dataset from the Kaggle website is used to train five machine learning models, and the outcomes are compared. The tokenized comments are transformed into feature vectors using the count and TF-IDF vectorizers. Models' performance in the test dataset is evaluated using the accuracy metric.
+<br/>
+<br/>
 
-## 
+## Results obtained from the test dataset
+<img width="701" alt="Results" src="https://user-images.githubusercontent.com/76807214/176205434-71566957-44db-4afa-ac57-edcf7a6347ee.png">
+<br/>
+
+## Steps to run rhis project
+1. Set up spark on your device.
+2. Create a Maven Project on Eclipse or IntelliJ IDEA.
+3. Copy the java files from this project to your project.
+4. Give the right path of the dataset.
+#
+<br/>
+<br/>
+<br/>
+<br/>
+
+# <p align = "center"> Preprocessing Outputs </P>
 
 ## Comments
 <img width="1097" alt="Comments" src="https://user-images.githubusercontent.com/76807214/176176013-12869164-a75a-4e06-bd93-e990d7d68948.png">
@@ -14,6 +31,3 @@
 
 ## TF-IDF Vectorized Comments
 <img width="1107" alt="TF-IDF" src="https://user-images.githubusercontent.com/76807214/176176032-b4fece53-b0d0-4f28-adc6-caf4b6c6a11e.png">
-
-## Results
-<img width="701" alt="Results" src="https://user-images.githubusercontent.com/76807214/176205434-71566957-44db-4afa-ac57-edcf7a6347ee.png">
