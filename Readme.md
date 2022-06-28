@@ -4,7 +4,7 @@ This project uses the Spark ML library in JAVA to classify comments as bullying 
 <br/>
 
 ## Results obtained from the test dataset
-<img width="701" alt="Results" src="https://user-images.githubusercontent.com/76807214/176205434-71566957-44db-4afa-ac57-edcf7a6347ee.png">
+<img width="500" alt="Results" src="https://user-images.githubusercontent.com/76807214/176205434-71566957-44db-4afa-ac57-edcf7a6347ee.png">
 <br/>
 
 ## Steps to run rhis project
