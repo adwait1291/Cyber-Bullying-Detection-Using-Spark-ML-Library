@@ -62,8 +62,8 @@ public class Decision_Tree_Classifier {
        
 	  	//---------------------------Model Training---------------------//
 		DecisionTreeClassifier dt = new DecisionTreeClassifier().setLabelCol("tagging");
-        DecisionTreeClassificationModel model = dt.fit(TrainDf);
-	    Dataset<Row> predictions = model.transform(TestDf);
+        	DecisionTreeClassificationModel model = dt.fit(TrainDf);
+	    	Dataset<Row> predictions = model.transform(TestDf);
 
 
 		//---------------------------Printing Accuracy---------------------//
