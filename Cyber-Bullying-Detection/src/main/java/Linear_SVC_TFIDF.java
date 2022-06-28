@@ -66,12 +66,12 @@ public class Linear_SVC_TFIDF {
 
 
 		//---------------------------Model Training---------------------//
-	    LinearSVC lsvc = new LinearSVC()
+	    	LinearSVC lsvc = new LinearSVC()
 	    		  .setMaxIter(10)
 	    		  .setRegParam(0.1)
 	    		  .setLabelCol("tagging");
-	    LinearSVCModel model = lsvc.fit(TrainDf);
-	    Dataset<Row> predictions = model.transform(TestDf);
+	    	LinearSVCModel model = lsvc.fit(TrainDf);
+	    	Dataset<Row> predictions = model.transform(TestDf);
 	    
 	    
 	  	//---------------------------Printing Accuracy---------------------//
