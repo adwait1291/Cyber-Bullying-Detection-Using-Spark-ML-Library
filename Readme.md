@@ -7,11 +7,11 @@ This project uses the Spark ML library in JAVA to classify comments as bullying 
 <img width="500" alt="Results" src="https://user-images.githubusercontent.com/76807214/176205434-71566957-44db-4afa-ac57-edcf7a6347ee.png">
 <br/>
 
-## Steps to run rhis project
+## Steps to run this project
 1. Set up spark on your device.
 2. Create a Maven Project on Eclipse or IntelliJ IDEA.
-3. Copy the java files from this project to your project.
-4. Give the right path of the dataset.
+3. Copy java files from this project to your project.
+4. Give the correct path of the dataset.
 #
 <br/>
 <br/>
